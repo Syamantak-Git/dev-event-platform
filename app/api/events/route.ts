@@ -45,3 +45,13 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+    try {
+        await connectDB()
+        const events = await Event.find().sort({createdAt:-1});
+        return NextResponse.json({message:"event list success", events}, {status:200})
+    } catch (e) {
+        return NextResponse.json({message: "event fetching failed", error:e}, {status:500})
+    }
+}
