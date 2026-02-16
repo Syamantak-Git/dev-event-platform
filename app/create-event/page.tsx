@@ -21,23 +21,23 @@ export default function CreateEventPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    // Convert agenda (newline separated) → JSON string
     const agendaText = formData.get("agenda") as string;
     const agendaArray = agendaText
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean);
 
+    // Convert tags (comma separated) → JSON string
     const tagsText = formData.get("tags") as string;
     const tagsArray = tagsText
       .split(",")
       .map((tag) => tag.trim())
       .filter(Boolean);
 
-    formData.delete("agenda");
-    formData.delete("tags");
-
-    agendaArray.forEach((item) => formData.append("agenda", item));
-    tagsArray.forEach((tag) => formData.append("tags", tag));
+    // IMPORTANT: Replace with JSON strings
+    formData.set("agenda", JSON.stringify(agendaArray));
+    formData.set("tags", JSON.stringify(tagsArray));
 
     try {
       const res = await fetch("/api/events", {
@@ -75,7 +75,6 @@ export default function CreateEventPage() {
           <Textarea name="description" placeholder="Short Description" required />
           <Textarea name="overview" placeholder="Overview" required />
 
-          {/* Image Upload */}
           <div>
             <label className="block mb-2 text-sm text-gray-400">
               Event Image
